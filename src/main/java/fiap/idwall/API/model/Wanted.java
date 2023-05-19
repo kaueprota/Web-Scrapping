@@ -1,7 +1,6 @@
 package fiap.idwall.API.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -18,29 +17,42 @@ public class Wanted {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String img;
 
-    @NotBlank
+    @Column(nullable = false)
     private String name;
+
+    @Column
     private int age;
+
     @Size(max = 10)
-    private String Hair;
-    @Size(max = 20)
-    private String Eyes;
+    private String hair;
+
+    @Column(length = 10)
+    private String eyes;
+
     @Size(max = 4)
-    private String Height;
+    private String height;
+
+    @Column()
     private Date date_of_birth;
+
     @Size(max = 2)
     private String sex;
+
+    @Column
     private String citizenship;
 
     @Enumerated(EnumType.STRING)
-    @NotBlank
+    @Column(nullable = false)
     private WantedFor wantedFor;
 
     @Enumerated(EnumType.STRING)
-    @NotBlank
+    @Column(nullable = false)
     private Category category;
 
+    @Column
     private double reward;
 }
