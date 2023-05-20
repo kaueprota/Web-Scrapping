@@ -46,6 +46,7 @@ public class WantedController {
             } else {
                 // Busca uma lista de wanteds pelo nome no repositório
                 List<Wanted> wantedList = wantedRepository.findByName(param);
+
                 if (!wantedList.isEmpty()) {
                     // Retorna uma resposta de sucesso 200 (OK) com a lista de wanteds encontrados
                     return ResponseEntity.ok(wantedList);
@@ -77,22 +78,22 @@ public class WantedController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteWantedById(@PathVariable Long id) {
-        try {
-            // Verifica se o wanted com o ID fornecido existe no repositório
-            if (wantedRepository.existsById(id)) {
-                // Deleta o wanted pelo ID no repositório
-                wantedRepository.deleteById(id);
-                // Retorna uma resposta de sucesso 200 (OK) com uma mensagem de sucesso
-                return ResponseEntity.ok("Wanted deletado com sucesso!");
-            } else {
-                // Retorna uma resposta de erro 404 (Not Found) se o wanted não for encontrado
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Wanted não encontrado");
+        public ResponseEntity<String> deleteWantedById(@PathVariable Long id) {
+            try {
+                // Verifica se o wanted com o ID fornecido existe no repositório
+                if (wantedRepository.existsById(id)) {
+                    // Deleta o wanted pelo ID no repositório
+                    wantedRepository.deleteById(id);
+                    // Retorna uma resposta de sucesso 200 (OK) com uma mensagem de sucesso
+                    return ResponseEntity.ok("Wanted deletado com sucesso!");
+                } else {
+                    // Retorna uma resposta de erro 404 (Not Found) se o wanted não for encontrado
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Wanted não encontrado");
+                }
+            } catch (Exception e) {
+                // Retorna uma resposta de erro 500 (Internal Server Error) se ocorrer uma exceção ao deletar o wanted
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao deletar o Wanted: " + e.getMessage());
             }
-        } catch (Exception e) {
-            // Retorna uma resposta de erro 500 (Internal Server Error) se ocorrer uma exceção ao deletar o wanted
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao deletar o Wanted: " + e.getMessage());
-        }
     }
 
 }
