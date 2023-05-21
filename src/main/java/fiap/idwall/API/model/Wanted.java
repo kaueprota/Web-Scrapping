@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 @Entity
+@Table(name = "WANTED")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,41 +19,38 @@ public class Wanted {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "IMG")
     private String img;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "NAME")
     private String name;
 
-    @Column
-    private int age;
-
-    @Size(max = 10)
+    @Column(length = 10, name = "HAIR")
     private String hair;
 
-    @Column(length = 10)
+    @Column(length = 10, name = "EYES")
     private String eyes;
 
-    @Size(max = 4)
+    @Column(length = 5, name = "HEIGHT")
     private String height;
 
-    @Column()
-    private Date date_of_birth;
+    @Column(name = "DATE_OF_BIRTH")
+    private Date dateOfBirth;
 
-    @Size(max = 2)
+    @Column(length = 6, name = "SEX")
     private String sex;
 
-    @Column
+    @Column(name = "CITIZENSHIP")
     private String citizenship;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, name = "WANTED_FOR")
     private WantedFor wantedFor;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, name = "CATEGORY")
     private Category category;
 
-    @Column
+    @Column(name = "REWARD")
     private double reward;
 }
