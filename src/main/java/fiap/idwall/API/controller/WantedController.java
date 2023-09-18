@@ -72,7 +72,7 @@ public class WantedController {
             wantedList.add(wanted);
         }
 
-        wantedRepository.saveAll(wantedList);
+       // wantedRepository.saveAll(wantedList);
 
         return wantedList.toArray(new Wanted[0]);
     }
