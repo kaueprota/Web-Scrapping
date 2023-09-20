@@ -1,9 +1,8 @@
 package fiap.idwall.API.controller;
 
-import fiap.idwall.API.dto.WantedApiResponse;
-import fiap.idwall.API.dto.WantedApiResponseDto;
 import fiap.idwall.API.model.Wanted;
 import fiap.idwall.API.model.repository.WantedRepository;
+import fiap.idwall.API.service.WantedService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,9 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,24 +25,11 @@ public class WantedController {
 
     @Autowired
     private WantedRepository wantedRepository;
+
+    @Autowired
+    private WantedService wantedService;
+
     private static final Logger log = LoggerFactory.getLogger(WantedController.class);
-//    @Operation(summary = "Retorna todos os procurados existentes em nosso banco de dados")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Sucesso"),
-//            @ApiResponse(responseCode = "400", description = "Requisição mal formatada"),
-//            @ApiResponse(responseCode = "500", description = "Erro interno do servidor") })
-//    @GetMapping
-//    public ResponseEntity<List<Wanted>> getAllWanted() {
-//        try {
-//            // Recupera uma lista de todos os wanteds do repositório
-//            List<Wanted> wantedList = wantedRepository.findAll();
-//            return ResponseEntity.ok(wantedList);
-//        } catch (Exception e) {
-//            // Retorna uma resposta de erro 500 (Internal Server Error) se ocorrer uma exceção
-//            log.error("Erro ao recuperar Wanted", e);
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//        }
-//    }
 
     @Operation(summary = "Retorna todos os procurados existentes em nosso banco de dados")
     @ApiResponses(value = {
@@ -53,30 +37,32 @@ public class WantedController {
             @ApiResponse(responseCode = "400", description = "Requisição mal formatada"),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor") })
     @GetMapping
-    public Wanted[] getAllWanted() {
-        String apiUrl = "https://api.fbi.gov/wanted/v1/list";
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        WantedApiResponse apiResponse = restTemplate.getForObject(apiUrl, WantedApiResponse.class);
-
-        List<WantedApiResponseDto> apiWantedList = apiResponse.getItems();
-
-        List<Wanted> wantedList = new ArrayList<>();
-
-        for (WantedApiResponseDto apiWanted : apiWantedList) {
-            Wanted wanted = new Wanted();
-            wanted.setHair(apiWanted.getHair_raw());
-            wanted.setEyes(apiWanted.getEyes_raw());
-
-            wantedList.add(wanted);
+    public ResponseEntity<List<Wanted>> getAllWanted() {
+        try {
+            // Recupera uma lista de todos os wanteds do repositório
+            List<Wanted> wantedList = wantedRepository.findAll();
+            return ResponseEntity.ok(wantedList);
+        } catch (Exception e) {
+            // Retorna uma resposta de erro 500 (Internal Server Error) se ocorrer uma exceção
+            log.error("Erro ao recuperar Wanted", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-
-       // wantedRepository.saveAll(wantedList);
-
-        return wantedList.toArray(new Wanted[0]);
     }
 
+    @Operation(summary = "Retorna todos os dados da API externa e salva no banco de dados")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição mal formatada"),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor") })
+    @GetMapping("/save")
+    public ResponseEntity<List<Wanted>> getByApiAndSave() {
+        try {
+            return ResponseEntity.ok(List.of(wantedService.getByApiAndSave()));
+        } catch (Exception e) {
+            log.error("Erro ao salvar os dados", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
     @Operation(summary = "Aqui, podemos realizar uma busca direcionada")
     @ApiResponses(value = {

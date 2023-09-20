@@ -1,4 +1,6 @@
-package fiap.idwall.API.dto;
+package fiap.idwall.API.vo;
+
+import fiap.idwall.API.vo.dto.WantedApiResponseDto;
 
 import java.util.List;
 
