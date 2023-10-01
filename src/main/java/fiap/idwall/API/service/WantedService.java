@@ -16,9 +16,10 @@ public class WantedService {
 
     @Autowired
     private WantedRepository wantedRepository;
-
+    // Campo para manter o número da página atual
+    private int currentPage = 1;
     public Wanted[] getByApiAndSave() {
-        String apiUrl = "https://api.fbi.gov/wanted/v1/list";
+        String apiUrl = "https://api.fbi.gov/wanted/v1/list?page=" + currentPage + "&pageSize=50";
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -33,13 +34,17 @@ public class WantedService {
             wanted.setHair(apiWanted.getHair_raw());
             wanted.setEyes(apiWanted.getEyes_raw());
             wanted.setReward(apiWanted.getReward_max());
-
+            wanted.setSex(apiWanted.getSex());
+            wanted.setTitle(apiWanted.getTitle());
             wantedList.add(wanted);
 
             //wantedRepository.save(wanted);
         }
 
         wantedRepository.saveAll(wantedList);
+
+        // Incrementa o número da página para a próxima chamada
+        currentPage++;
 
         return wantedList.toArray(new Wanted[0]);
     }

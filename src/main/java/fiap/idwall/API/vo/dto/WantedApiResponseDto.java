@@ -5,6 +5,9 @@ public class WantedApiResponseDto {
         private String eyes_raw;
         private Double reward_min;
         private Double reward_max;
+        private String sex;
+        @JsonProperty("title")
+        private String title;
 
     public String getHair_raw() {
         return hair_raw;
@@ -36,5 +39,21 @@ public class WantedApiResponseDto {
 
     public void setReward_max(Double reward_max) {
         this.reward_max = reward_max;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle_max(String title) {
+        this.title = title;
     }
 }

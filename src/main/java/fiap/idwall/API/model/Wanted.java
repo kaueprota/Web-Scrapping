@@ -54,6 +54,13 @@ public class Wanted {
     @Column(name = "REWARD")
     private double reward;
 
+    @lombok.Setter
+    @Column(name = "SEX")
+    private String sex;
+
+    @Column(name = "TITLE")
+    private String title;
+
 
     public Long getId() {
         return id;
@@ -150,4 +157,22 @@ public class Wanted {
     public void setReward(double reward) {
         this.reward = reward;
     }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+
 }
